@@ -28,10 +28,11 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import com.google.api.client.auth.oauth2.Credential;
+import com.google.api.client.extensions.java6.auth.oauth2.AbstractPromptReceiver;
 import com.google.api.client.extensions.java6.auth.oauth2.AuthorizationCodeInstalledApp;
-import com.google.api.client.extensions.jetty.auth.oauth2.LocalServerReceiver;
 import com.google.api.client.googleapis.auth.oauth2.GoogleAuthorizationCodeFlow;
 import com.google.api.client.googleapis.auth.oauth2.GoogleClientSecrets;
+import com.google.api.client.googleapis.auth.oauth2.GoogleOAuthConstants;
 import com.google.api.client.googleapis.javanet.GoogleNetHttpTransport;
 import com.google.api.client.http.HttpTransport;
 import com.google.api.client.json.JsonFactory;
@@ -116,9 +117,13 @@ public class CmdLineAuthenticationProvider {
                 httpTransport, JSON_FACTORY, clientSecrets, scopes)
                 .setDataStoreFactory(dataStoreFactory)
                 .build();
-
-        // authorize
-        return new AuthorizationCodeInstalledApp(flow, new LocalServerReceiver()).authorize("user");
+        
+        // authorize, this will prompt the user to enter a url on their browser then paste the code 
+        return new AuthorizationCodeInstalledApp(flow, new PromptReceiver()).authorize("user");
+        
+        // the line below will expect you to have some way to browse to the URL locally, not useful when you 
+        // are running a Pi through SSH
+        // return new AuthorizationCodeInstalledApp(flow, new LocalServerReceiver()).authorize("user");
     }
 
     /**
@@ -133,5 +138,12 @@ public class CmdLineAuthenticationProvider {
      */
     public void setClientSecretsFile(String clientSecretsFile) {
         this.clientSecretsFile = clientSecretsFile;
+    }
+    
+    private static class PromptReceiver extends AbstractPromptReceiver {
+    	@Override
+    	public String getRedirectUri() {
+    		return GoogleOAuthConstants.OOB_REDIRECT_URI;
+    	}
     }
 }
