@@ -47,7 +47,9 @@
 		<sourceDirectory>src</sourceDirectory>
 		<resources>
 			<resource>
-				<directory>src</directory>
+				<directory>src/main/resources</directory>
+				<targetPath>${project.build.directory}/classes</targetPath>
+				<filtering>false</filtering>
 				<excludes>
 					<exclude>**/*.java</exclude>
 				</excludes>

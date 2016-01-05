@@ -42,7 +42,7 @@ public class RaspberryPiApp {
 		
 		CmdLineAuthenticationProvider provider = new CmdLineAuthenticationProvider();
 		// see https://developers.google.com/api-client-library/java/
-		provider.setClientSecretsFile("/client_secret.json");
+		provider.setClientSecretsFile("client_secret.json");
 		provider.setScopes(SCOPES);
 		
 		// get the oauth credentials
