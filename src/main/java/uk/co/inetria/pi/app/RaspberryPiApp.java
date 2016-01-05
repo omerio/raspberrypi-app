@@ -41,6 +41,7 @@ public class RaspberryPiApp {
 	public static void main(String[] args) throws IOException {
 		
 		CmdLineAuthenticationProvider provider = new CmdLineAuthenticationProvider();
+		// see https://developers.google.com/api-client-library/java/
 		provider.setClientSecretsFile("/client_secret.json");
 		provider.setScopes(SCOPES);
 		

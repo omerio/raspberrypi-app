@@ -108,7 +108,7 @@ public class CmdLineAuthenticationProvider {
         dataStoreFactory = new FileDataStoreFactory(DATA_STORE_DIR);
         // load client secrets
         GoogleClientSecrets clientSecrets = GoogleClientSecrets.load(JSON_FACTORY,
-                new InputStreamReader(CmdLineAuthenticationProvider.class.getResourceAsStream(this.clientSecretsFile)));
+                new InputStreamReader(getClass().getClassLoader().getResourceAsStream(this.clientSecretsFile)));
 
         // Set up authorization code flow.
 
