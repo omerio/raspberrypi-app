@@ -116,7 +116,7 @@ public class RaspberryPiApp {
         	if(i > 19) {
         		try {
 
-        			if(valueChanged(temp, previousTemp, 2)) {
+        			if(valueChanged(temp, previousTemp, 1)) {
         				log.info("Temperature changed: " + temp);
         				log.info("Temperature previous: " + previousTemp);
         				sendSensorData(temp, "temperature", sensor);
@@ -129,7 +129,7 @@ public class RaspberryPiApp {
         				changed = true;
         			}
 
-        			if(valueChanged(volt, previousVolt, 0.30)) {
+        			if(valueChanged(volt, previousVolt, 0.10)) {
         				log.info("Volt changed: " + volt);
         				log.info("Volt previous: " + previousVolt);
         				sendSensorData(volt, "voltage", sensor);
