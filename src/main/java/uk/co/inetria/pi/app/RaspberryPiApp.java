@@ -81,6 +81,8 @@ public class RaspberryPiApp {
             log.severe(" ==>> SPI SETUP FAILED");
             return;
         }
+        
+        int i = 0;
 		
         // infinite loop
         while(true) {
@@ -104,9 +106,9 @@ public class RaspberryPiApp {
         	//log.info("Voltage raw reading is: " + data);
         	//log.info("Voltage reading is: " + volt);
         	
-        	// ditch the first 20 readings, values seem to oscillate a lot at startup
-        	int i = 0;
         	boolean changed = false;
+        	
+        	// ditch the first 20 readings, values seem to oscillate a lot at startup
         	
         	if(i > 19) {
         		try {
