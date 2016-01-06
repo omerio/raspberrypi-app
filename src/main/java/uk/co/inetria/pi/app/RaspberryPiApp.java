@@ -79,7 +79,7 @@ public class RaspberryPiApp {
 		// 1.35 MHz - VDD = 2.7V		
 		// 3.6 MHz - VDD = 5V
 		
-        int fd = Spi.wiringPiSPISetup(0, 1_000_000);
+        int fd = Spi.wiringPiSPISetup(0, 500_000);
         if (fd <= -1) {
             log.severe(" ==>> SPI SETUP FAILED");
             return;
@@ -116,7 +116,7 @@ public class RaspberryPiApp {
         	if(i > 19) {
         		try {
 
-        			if(valueChanged(temp, previousTemp, 1)) {
+        			if(valueChanged(temp, previousTemp, 2)) {
         				log.info("Temperature changed: " + temp);
         				sendSensorData(temp, "temperature", sensor);
         				changed = true;
@@ -128,7 +128,7 @@ public class RaspberryPiApp {
         				changed = true;
         			}
 
-        			if(valueChanged(volt, previousVolt, 0.05)) {
+        			if(valueChanged(volt, previousVolt, 0.3)) {
         				log.info("Volt changed: " + volt);
         				sendSensorData(volt, "voltage", sensor);
         				changed = true;
