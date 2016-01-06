@@ -43,7 +43,7 @@ import com.google.api.client.util.store.FileDataStoreFactory;
 
 /**
  * Google API command line authentication provider. Useful for interactively obtaining
- * OAuth2 auothrization from users running applications on the commandline
+ * OAuth2 authorization from users running applications on the command-line
  * 
  * @author Omer Dawelbeit (omerio)
  *
