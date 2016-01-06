@@ -70,6 +70,8 @@ public class RaspberryPiApp {
 	 */
 	public static void main(String[] args) throws IOException, InterruptedException {
 		
+		log.info("Starting app");
+		
 		// get the sensor endpoint
 		Sensor sensor = getSensorEndpoint();
 		
@@ -86,51 +88,64 @@ public class RaspberryPiApp {
         	int data = readChannel(TEMP);
         	double temp = calculateTemperature(data);
             
-        	log.info("Temperature raw reading is: " + data);
-        	log.info("Temperature Degrees reading is: " + temp);
+        	//log.info("Temperature raw reading is: " + data);
+        	//log.info("Temperature Degrees reading is: " + temp);
         	
         	data = readChannel(LIGHT);
         	double lux = calculateIllumination(data);
         	
-        	log.info("Light raw reading is: " + data);
-        	log.info("Light Lux reading is: " + lux);
+        	//log.info("Light raw reading is: " + data);
+        	//log.info("Light Lux reading is: " + lux);
         	
         	
         	data = readChannel(VOLT);
         	double volt = calculateVoltage(data);
-
-
-        	log.info("Voltage raw reading is: " + data);
-        	log.info("Voltage reading is: " + volt);
         	
-        	try {
+        	//log.info("Voltage raw reading is: " + data);
+        	//log.info("Voltage reading is: " + volt);
+        	
+        	// ditch the first 20 readings, values seem to oscillate a lot at startup
+        	int i = 0;
+        	boolean changed = false;
+        	
+        	if(i > 19) {
+        		try {
 
-        		if(valueChanged(temp, previousTemp, 1)) {
-        			log.info("Temperature changed");
-        			sendSensorData(temp, "temperature", sensor);
+        			if(valueChanged(temp, previousTemp, 1)) {
+        				log.info("Temperature changed: " + temp);
+        				sendSensorData(temp, "temperature", sensor);
+        				changed = true;
+        			}
+
+        			if(valueChanged(lux, previousLux, 1)) {
+        				log.info("Lux changed: " + lux);
+        				sendSensorData(lux, "illuminance", sensor);
+        				changed = true;
+        			}
+
+        			if(valueChanged(volt, previousVolt, 0.05)) {
+        				log.info("Volt changed: " + volt);
+        				sendSensorData(volt, "voltage", sensor);
+        				changed = true;
+        			}
+
+        		} catch(IOException e) {
+        			log.log(Level.SEVERE, "Failed to update backend", e);
+        			Thread.sleep(10000);
         		}
 
-        		if(valueChanged(lux, previousLux, 1)) {
-        			log.info("Lux changed");
-        			sendSensorData(lux, "illuminance", sensor);
-        		}
-
-        		if(valueChanged(volt, previousVolt, 0.05)) {
-        			log.info("Volt changed");
-        			sendSensorData(volt, "voltage", sensor);
-        		}
-
-        	} catch(IOException e) {
-        		log.log(Level.SEVERE, "Failed to update backend", e);
-        		Thread.sleep(10000);
+        		previousTemp = temp;
+        		previousLux = lux;
+        		previousVolt = volt;
+        		
+        	} else {
+        		i++;
         	}
 
-        	previousTemp = temp;
-        	previousLux = lux;
-        	previousVolt = volt;
-
-	
-        	Thread.sleep(1000);
+        	if(!changed) {
+        		// only sleep we have not changed anything
+        		Thread.sleep(1000);
+        	}
 
         }
 	}
