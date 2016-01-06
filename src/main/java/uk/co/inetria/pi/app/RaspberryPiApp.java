@@ -75,8 +75,11 @@ public class RaspberryPiApp {
 		// get the sensor endpoint
 		Sensor sensor = getSensorEndpoint();
 		
-		 // setup SPI for communication
-        int fd = Spi.wiringPiSPISetup(0, 10000000);
+		// setup SPI for communication from the datasheet, 1 MHz sounds reasonable
+		// 1.35 MHz - VDD = 2.7V		
+		// 3.6 MHz - VDD = 5V
+		
+        int fd = Spi.wiringPiSPISetup(0, 1_000_000);
         if (fd <= -1) {
             log.severe(" ==>> SPI SETUP FAILED");
             return;
