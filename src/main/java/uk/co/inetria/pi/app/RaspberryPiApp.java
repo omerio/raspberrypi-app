@@ -79,8 +79,6 @@ public class RaspberryPiApp {
             log.severe(" ==>> SPI SETUP FAILED");
             return;
         }
-        
-        int i = 0;
 		
         // infinite loop
         while(true) {
@@ -100,12 +98,12 @@ public class RaspberryPiApp {
         	
         	data = readChannel(VOLT);
         	double volt = calculateVoltage(data);
-        	
-        	// throw away the first 3 readings as these seem to oscillate a little bit
-        	if(i > 2) {
 
-        		log.info("Voltage raw reading is: " + data);
-        		log.info("Voltage reading is: " + volt);
+
+        	log.info("Voltage raw reading is: " + data);
+        	log.info("Voltage reading is: " + volt);
+        	
+        	try {
 
         		if(valueChanged(temp, previousTemp, 1)) {
         			log.info("Temperature changed");
@@ -122,15 +120,17 @@ public class RaspberryPiApp {
         			sendSensorData(volt, "voltage", sensor);
         		}
 
-        		previousTemp = temp;
-        		previousLux = lux;
-        		previousVolt = volt;
-        	
-        	} else {
-        		i++;
+        	} catch(IOException e) {
+        		log.log(Level.SEVERE, "Failed to update backend", e);
+        		Thread.sleep(10000);
         	}
-        	   	
-        	Thread.sleep(3000);
+
+        	previousTemp = temp;
+        	previousLux = lux;
+        	previousVolt = volt;
+
+	
+        	Thread.sleep(1000);
 
         }
 	}
@@ -233,8 +233,7 @@ public class RaspberryPiApp {
 		// 0_0_0_0_0_0_b9_b8 << 8 = b9_b8_0_0_0_0_0_0_0_0
 		// b9_b8_0_0_0_0_0_0_0_0 + packet[2] = b9_b8_0_0_0_0_0_0_0_0 + b7_b6_b5_b4_b3_b2_b1_b0  = b9_b8_b7_b6_b5_b4_b3_b2_b1_b0
 		
-		// return unsigned data
-		return data & 0x3FF;
+		return data;
 	}
 	
 	/**
