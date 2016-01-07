@@ -21,6 +21,7 @@ import com.google.api.client.util.DateTime;
 import com.pi4j.io.gpio.GpioController;
 import com.pi4j.io.gpio.GpioFactory;
 import com.pi4j.io.gpio.GpioPinDigitalOutput;
+import com.pi4j.io.gpio.PinState;
 import com.pi4j.io.gpio.RaspiPin;
 import com.pi4j.wiringpi.Spi;
 
@@ -166,6 +167,8 @@ public class RaspberryPiApp {
         	if(!changed) {
         		// only sleep we have not changed anything
         		Thread.sleep(1000);
+        		// turn off the status led
+        		led1.setState(PinState.LOW);
         	}
 
         }
@@ -283,8 +286,8 @@ public class RaspberryPiApp {
 	private static void sendSensorData(double value, String channel, 
 			Sensor sensor, GpioPinDigitalOutput led1) throws IOException {
 		
-		// continuously blink the led every 1/2 second for 4 seconds
-        led1.blink(500, 4000);
+		// continuously blink the led every 1/2 second for 3 seconds
+        led1.blink(500, 3000);
 		// test creating some sample data
 		SensorData data = new SensorData();
 		data.setChannel(channel);
