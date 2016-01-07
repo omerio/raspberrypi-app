@@ -18,6 +18,10 @@ import com.google.api.client.googleapis.javanet.GoogleNetHttpTransport;
 import com.google.api.client.http.HttpTransport;
 import com.google.api.client.json.jackson2.JacksonFactory;
 import com.google.api.client.util.DateTime;
+import com.pi4j.io.gpio.GpioController;
+import com.pi4j.io.gpio.GpioFactory;
+import com.pi4j.io.gpio.GpioPinDigitalOutput;
+import com.pi4j.io.gpio.RaspiPin;
 import com.pi4j.wiringpi.Spi;
 
 /**
@@ -55,7 +59,10 @@ public class RaspberryPiApp {
 		new double []{600_000, 0.1},
 		new double []{70_000, 1},
 		new double []{10_000, 10},
+		new double []{3_000, 40},
 		new double []{1_500, 100},
+		new double []{1_000, 110},
+		new double []{500, 500},
 		new double []{300, 1000}
 	};
 	
@@ -84,6 +91,13 @@ public class RaspberryPiApp {
             log.severe(" ==>> SPI SETUP FAILED");
             return;
         }
+        
+        // create gpio controller
+        final GpioController gpio = GpioFactory.getInstance();
+        
+        // provision gpio pin #01 as an output pins and blink, we blink this led to indicate that we are 
+        // updating cloud endpoints
+        final GpioPinDigitalOutput led1 = gpio.provisionDigitalOutputPin(RaspiPin.GPIO_01);
         
         int i = 0;
 		
@@ -119,20 +133,20 @@ public class RaspberryPiApp {
         			if(valueChanged(temp, previousTemp, 1)) {
         				log.info("Temperature changed: " + temp);
         				log.info("Temperature previous: " + previousTemp);
-        				sendSensorData(temp, "temperature", sensor);
+        				sendSensorData(Math.round(temp), "temperature", sensor, led1);
         				changed = true;
         			}
 
         			if(valueChanged(lux, previousLux, 1)) {
         				log.info("Lux changed: " + lux);
-        				sendSensorData(lux, "illuminance", sensor);
+        				sendSensorData(lux, "illuminance", sensor, led1);
         				changed = true;
         			}
 
         			if(valueChanged(volt, previousVolt, 0.10)) {
         				log.info("Volt changed: " + volt);
         				log.info("Volt previous: " + previousVolt);
-        				sendSensorData(volt, "voltage", sensor);
+        				sendSensorData(volt, "voltage", sensor, led1);
         				changed = true;
         			}
 
@@ -203,8 +217,9 @@ public class RaspberryPiApp {
         	 }
          }
          
+         // take the last value from the array
          if(values == null) {
-        	 values = PHOTO_CELL[4];
+        	 values = PHOTO_CELL[PHOTO_CELL.length - 1];
          }
          
          return values[1];
@@ -223,7 +238,7 @@ public class RaspberryPiApp {
          double millivolts = data * ( 3300.0 / 1023.0 );
          double temp = ((millivolts - 100.0) / 10.0) - 40.0;
          
-         return Math.round(temp);
+         return temp;
 	}
 	
 	/**
@@ -265,7 +280,11 @@ public class RaspberryPiApp {
 	 * @param sensor
 	 * @throws IOException
 	 */
-	private static void sendSensorData(double value, String channel, Sensor sensor) throws IOException {
+	private static void sendSensorData(double value, String channel, 
+			Sensor sensor, GpioPinDigitalOutput led1) throws IOException {
+		
+		// continuously blink the led every 1/2 second for 4 seconds
+        led1.blink(500, 4000);
 		// test creating some sample data
 		SensorData data = new SensorData();
 		data.setChannel(channel);
