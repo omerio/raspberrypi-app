@@ -147,10 +147,10 @@ public class RaspberryPiApp {
         				previousLux = lux;
         			}
 
-        			if(valueChanged(volt, previousVolt, 0.10)) {
+        			if(valueChanged(volt, previousVolt, 0.30)) {
         				log.info("Volt changed: " + volt);
         				log.info("Volt previous: " + previousVolt);
-        				sendSensorData(volt, "voltage", sensor, led1);
+        				sendSensorData((Math.round(volt * 100.0) / 100.0), "voltage", sensor, led1);
         				changed = true;
         				previousVolt = volt;
         			}
@@ -195,7 +195,7 @@ public class RaspberryPiApp {
 		double vo = data * 3.3 / 1023.0;
         double vin = vo * 1.67;
         // round to two decimal places
-        vin = Math.round(vin * 100.0) / 100.0;
+        //vin = Math.round(vin * 100.0) / 100.0;
         return vin;
 	}
 	
