@@ -62,7 +62,7 @@ public class RaspberryPiApp {
 		new double []{10_000, 10},
 		new double []{3_000, 40},
 		new double []{1_500, 100},
-		new double []{1_000, 110},
+		//new double []{1_000, 110},
 		new double []{700, 200},
 		new double []{500, 500},
 		new double []{400, 600},
@@ -85,7 +85,7 @@ public class RaspberryPiApp {
 		// get the sensor endpoint
 		Sensor sensor = getSensorEndpoint();
 		
-		// setup SPI for communication from the datasheet, 1 MHz sounds reasonable
+		// setup SPI for communication from the datasheet, 0.5 MHz sounds reasonable
 		// 1.35 MHz - VDD = 2.7V		
 		// 3.6 MHz - VDD = 5V
 		
