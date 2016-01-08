@@ -63,7 +63,9 @@ public class RaspberryPiApp {
 		new double []{3_000, 40},
 		new double []{1_500, 100},
 		new double []{1_000, 110},
+		new double []{700, 200},
 		new double []{500, 500},
+		new double []{400, 600},
 		new double []{300, 1000}
 	};
 	
@@ -97,7 +99,7 @@ public class RaspberryPiApp {
         final GpioController gpio = GpioFactory.getInstance();
         
         // provision gpio pin #01 as an output pins and blink, we blink this led to indicate that we are 
-        // updating cloud endpoints
+        // updating cloud endpoints (status led)
         final GpioPinDigitalOutput led1 = gpio.provisionDigitalOutputPin(RaspiPin.GPIO_01);
         
         int i = 0;
@@ -116,8 +118,7 @@ public class RaspberryPiApp {
         	
         	//log.info("Light raw reading is: " + data);
         	//log.info("Light Lux reading is: " + lux);
-        	
-        	
+        	   	
         	data = readChannel(VOLT);
         	double volt = calculateVoltage(data);
         	
@@ -136,12 +137,14 @@ public class RaspberryPiApp {
         				log.info("Temperature previous: " + previousTemp);
         				sendSensorData(Math.round(temp), "temperature", sensor, led1);
         				changed = true;
+        				previousTemp = temp;
         			}
 
         			if(valueChanged(lux, previousLux, 1)) {
         				log.info("Lux changed: " + lux);
         				sendSensorData(lux, "illuminance", sensor, led1);
         				changed = true;
+        				previousLux = lux;
         			}
 
         			if(valueChanged(volt, previousVolt, 0.10)) {
@@ -149,6 +152,7 @@ public class RaspberryPiApp {
         				log.info("Volt previous: " + previousVolt);
         				sendSensorData(volt, "voltage", sensor, led1);
         				changed = true;
+        				previousVolt = volt;
         			}
 
         		} catch(IOException e) {
@@ -156,10 +160,6 @@ public class RaspberryPiApp {
         			Thread.sleep(10000);
         		}
 
-        		previousTemp = temp;
-        		previousLux = lux;
-        		previousVolt = volt;
-        		
         	} else {
         		i++;
         	}
