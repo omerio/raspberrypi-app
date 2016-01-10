@@ -132,10 +132,10 @@ public class RaspberryPiApp {
         	if(i > 19) {
         		try {
 
-        			if(valueChanged(temp, previousTemp, 1)) {
+        			if(valueChanged(temp, previousTemp, 0.10)) {
         				log.info("Temperature changed: " + temp);
         				log.info("Temperature previous: " + previousTemp);
-        				sendSensorData(Math.round(temp), "temperature", sensor, led1);
+        				sendSensorData((Math.round(temp * 100.0) / 100.0), "temperature", sensor, led1);
         				changed = true;
         				previousTemp = temp;
         			}
@@ -147,7 +147,7 @@ public class RaspberryPiApp {
         				previousLux = lux;
         			}
 
-        			if(valueChanged(volt, previousVolt, 0.30)) {
+        			if(valueChanged(volt, previousVolt, 0.20)) {
         				log.info("Volt changed: " + volt);
         				log.info("Volt previous: " + previousVolt);
         				sendSensorData((Math.round(volt * 100.0) / 100.0), "voltage", sensor, led1);
