@@ -25,6 +25,7 @@ A Java based, Raspberry Pi App that sends data to authenticated Google App Engin
 ## Setup Instructions
 1. Start a shell on the Pi.
 1. Checkout the project `git clone https://github.com/omerio/raspberrypi-app.git`.
+2. Update the [client_secret.json](https://github.com/omerio/raspberrypi-app/blob/master/src/main/resources/client_secret.json) file with your client_id and client_secret. 
 1. Compile the project `cd raspberrypi-app && mvn clean package`, once built the RaspberryPiApp.jar will be available inside the dist folder
 2. Run the application `cd dist` then `sudo java -jar RaspberryPiApp.jar`. On first start the app will prompt you to copy and paste a link in your browser. Navigate to the URL and accept the Google Accounts permission request. It will give you a code that you can copy and paste into the command line prompt.
 3. On subsequent starts of the application you can use the `runapp.sh` script.
