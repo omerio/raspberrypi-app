@@ -30,4 +30,9 @@ A Java based, Raspberry Pi App that sends data to authenticated Google App Engin
 2. Run the application `cd dist` then `sudo java -jar RaspberryPiApp.jar`. On first start the app will prompt you to copy and paste a link in your browser. Navigate to the URL and accept the Google Accounts permission request. It will give you a code that you can copy and paste into the command line prompt.
 3. On subsequent starts of the application you can use the `runapp.sh` script.
 4. To kill the app do `ps -ef | grep java` and note the pid id then do a 'sudo kill pid-id'
+5. Optionally you can get the RaspberryPiApp.jar to run by default whenever the Pi starts:
+```bash
+sudo cp runapp.sh /etc/init.d/piapp
+sudo update-rc.d piapp defaults
+```
 
