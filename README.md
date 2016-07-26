@@ -15,7 +15,15 @@ A Java based, Raspberry Pi App that sends data to authenticated Google App Engin
 ## Documentation
 - [Real Time Sensor Dashboard Using Google App Engine and Raspberry Pi Zero](http://omerio.com/2016/01/16/real-time-sensor-dashboard-using-google-app-engine-and-raspberry-pi-zero/)
 
-## Prerequisites
+## Hardware Prerequisites
+- A Raspberry Pi Zero or Model B.
+- Assemble the hardware components on a breadboard by following the [blog post](http://omerio.com/2016/01/16/real-time-sensor-dashboard-using-google-app-engine-and-raspberry-pi-zero/).
+- Alternatively my friend Lez has created populated and bare boards for the hardware which you can purchase on his [Website](http://www.neptunenavigation.co.uk/pi/pcbfordashboard.htm).
+
+![Alt text](http://omerio.com/wp-content/uploads/2016/01/raspberry_pi_board.jpg "Boards")
+
+
+## Software Prerequisites
 - (Optional) Install [Apache Maven](https://www.xianic.net/post/installing-maven-on-the-raspberry-pi/) on the Raspberry Pi if you want to build the project on the Pi itself.
 - Make sure git and Java are installed on the Pi.
 - Install [Pi4J](http://pi4j.com/) library on the Pi.
